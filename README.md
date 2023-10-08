@@ -34,4 +34,4 @@ Using MVVM + Clean architecture
 
 ## Module
 본 프로젝트는 Multi-module 구조이며 각 Feature마다 모듈 형태로 구성되어 있습니다.
-<img src="arts/project-denpendency-graph.png" />
+<img src="arts/project-dependency-graph.png" />
