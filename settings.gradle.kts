@@ -14,7 +14,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "LoginCAApp"
+rootProject.name = "loginCAApp"
 include(
     ":app",
 

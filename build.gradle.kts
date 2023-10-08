@@ -4,6 +4,11 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven("https://oss.sonatype.org/content/repositories/snapshots")
+    }
+    dependencies {
+        // gradlew generateProjectDependencyGraph
+        classpath(libs.gradle.dependency.graph.generator.plugin)
     }
 }
 
@@ -16,6 +21,4 @@ plugins {
     alias(libs.plugins.android.library) apply false
 }
 
-apply {
-    from("gradle/dependencyGraph.gradle")
-}
+apply(plugin="com.vanniktech.dependency.graph.generator")

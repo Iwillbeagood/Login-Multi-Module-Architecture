@@ -1,9 +1,6 @@
-// from: https://github.com/DroidKaigi/conference-app-2021/blob/main/gradle/dependencyGraph.gradle
-// from: https://github.com/JakeWharton/SdkSearch/blob/3351cad9bfacb0a364858e843774147143f58c7a/gradle/projectDependencyGraph.gradle
 tasks.register('projectDependencyGraph') {
     doLast {
-        def dotFileName = 'project.dot'
-        def dot = new File(rootProject.rootDir, dotFileName)
+        def dot = new File(rootProject.buildDir, 'reports/dependency-graph/project.dot')
         dot.parentFile.mkdirs()
         dot.delete()
 
@@ -25,8 +22,6 @@ tasks.register('projectDependencyGraph') {
         def multiplatformProjects = []
         def jsProjects = []
         def androidProjects = []
-        def androidLibraryProjects = []
-        def androidDynamicFeatureProjects = []
         def javaProjects = []
 
         queue = [rootProject]
@@ -40,21 +35,14 @@ tasks.register('projectDependencyGraph') {
             if (project.plugins.hasPlugin('kotlin2js')) {
                 jsProjects.add(project)
             }
-            if (project.plugins.hasPlugin('com.android.application')) {
+            if (project.plugins.hasPlugin('com.android.library') || project.plugins.hasPlugin('com.android.application')) {
                 androidProjects.add(project)
-            }
-            if (project.plugins.hasPlugin('com.android.library')) {
-                androidLibraryProjects.add(project)
-            }
-            if (project.plugins.hasPlugin('com.android.dynamic-feature')) {
-                androidDynamicFeatureProjects.add(project)
             }
             if (project.plugins.hasPlugin('java-library') || project.plugins.hasPlugin('java')) {
                 javaProjects.add(project)
             }
 
             project.configurations.configureEach { config ->
-                if (config.name.toLowerCase().contains("test")) return
                 config.dependencies
                         .withType(ProjectDependency)
                         .collect { it.dependencyProject }
@@ -89,10 +77,6 @@ tasks.register('projectDependencyGraph') {
                 traits.add('fillcolor="#ffffba"')
             } else if (androidProjects.contains(project)) {
                 traits.add('fillcolor="#baffc9"')
-            } else if (androidLibraryProjects.contains(project)) {
-                traits.add('fillcolor="#81D4FA"')
-            } else if (androidDynamicFeatureProjects.contains(project)) {
-                traits.add('fillcolor="#c9baff"')
             } else if (javaProjects.contains(project)) {
                 traits.add('fillcolor="#ffb3ba"')
             } else {
@@ -121,12 +105,11 @@ tasks.register('projectDependencyGraph') {
 
         dot << '}\n'
 
-        def p = "dot -Tpng -O ${dotFileName}".execute([], dot.parentFile)
+        def p = 'dot -Tpng -O project.dot'.execute([], dot.parentFile)
         p.waitFor()
         if (p.exitValue() != 0) {
             throw new RuntimeException(p.errorStream.text)
         }
-        dot.delete()
 
         println("Project module dependency graph created at ${dot.absolutePath}.png")
     }

@@ -1,5 +1,6 @@
 plugins {
     id("jun.android.application")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {

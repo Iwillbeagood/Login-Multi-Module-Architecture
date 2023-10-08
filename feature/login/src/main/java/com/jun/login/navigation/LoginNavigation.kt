@@ -13,7 +13,9 @@ fun NavGraphBuilder.loginNavGraph(
     onSignInClick: (Int) -> Unit
 ) {
     composable(route = LoginRoute.route) {
-        LoginScreen(onSignInClick)
+        LoginScreen(
+            onSignInClick = onSignInClick
+        )
     }
 }
 
