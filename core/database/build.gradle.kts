@@ -8,6 +8,7 @@ plugins {
 android {
     namespace = "com.jun.database"
 }
+
 dependencies {
     implementation(projects.core.model)
 }
