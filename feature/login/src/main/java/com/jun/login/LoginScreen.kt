@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun LoginScreen(
     onSignInClick: (Int) -> Unit,
+    onLoginSuccess: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val emailState = viewModel.userEmail.value
@@ -53,7 +54,7 @@ fun LoginScreen(
                     snackBarHostState.showSnackbar(
                         message = "로그인을 성공했습니다."
                     )
-                    TODO("로그인을 성공하고 난 이후의 처리")
+                    onLoginSuccess()
                 }
             }
         }

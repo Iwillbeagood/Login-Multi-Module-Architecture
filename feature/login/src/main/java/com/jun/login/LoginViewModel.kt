@@ -1,9 +1,11 @@
 package com.jun.login
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jun.data.repository.UserPrefsRepository
 import com.jun.domain.usecase.LoginUsecase
 import com.jun.model.InvalidUserException
 import com.jun.model.User
@@ -15,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUsecase
+    private val loginUseCase: LoginUsecase,
+    private val userPrefRepository: UserPrefsRepository
 ) : ViewModel() {
 
     private val _userEmail = mutableStateOf("")
@@ -26,6 +29,18 @@ class LoginViewModel @Inject constructor(
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+
+    init {
+        viewModelScope.launch {
+            userPrefRepository.getUserPrefs().collect { (email, password) ->
+                if (email != "" && password != "") {
+                    _userEmail.value = email
+                    _userPassword.value = password
+                    onEvent(LoginEvent.Login)
+                }
+            }
+        }
+    }
 
     fun onEvent(event: LoginEvent) {
         when (event) {
@@ -38,6 +53,7 @@ class LoginViewModel @Inject constructor(
             is LoginEvent.Login -> {
                 viewModelScope.launch {
                     try {
+                        Log.d("TAG", "onEvent: ${userEmail.value} ${userPassword.value}")
                         loginUseCase(
                             User(
                                 email = userEmail.value,
