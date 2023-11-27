@@ -1,9 +1,9 @@
-# Login-CleanArchitecture
-CleanArchitecture Multi Module Login App
+# Login-Multi Module Login App
+Multi Module Login App
 
 
 ## Architecture
-Using MVVM + Clean architecture
+Using MVVM + Layered architecture
 
 
 ## Language
