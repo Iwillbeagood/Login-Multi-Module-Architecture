@@ -7,7 +7,7 @@ import com.jun.model.InvalidUserException
 import com.jun.model.User
 import javax.inject.Inject
 
-class SignInUsecase  @Inject constructor(
+class SignInUsecase @Inject constructor(
     private val repository: UserRepository
 ) {
 
